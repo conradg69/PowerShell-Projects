@@ -15,7 +15,7 @@ $publication_object = $repdb.transpublications[$publication_name]
 $publication_object.TransArticles
 $publication_object.TransSubscriptions
 
-$script_val = [Microsoft.SqlServer.Replication.ScriptOptions]::Creation -bxor
+$script_val = [Microsoft.SqlServer.Replication.ScriptOptions]::Creation -bxor 
 [Microsoft.SqlServer.Replication.ScriptOptions]::IncludeGo
 
 $script_val = [Microsoft.SqlServer.Replication.ScriptOptions]::Creation -bxor
@@ -34,5 +34,4 @@ $publication_object.Script($script_val)
 Foreach ($article in $publication_object.TransArticles) {
 
     $article.Script($script_val)
-
 }
