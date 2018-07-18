@@ -17,7 +17,7 @@ $newRSDSName = "Datasource"
 $newRSDSExtension = "SQL"
 $newRSDSConnectionString = "Initial Catalog=Db1; Data Source=Server1"
 $newRSDSCredentialRetrieval = "Store"
-$newRSDSCredential = Get-Credential -Message "Enter user credentials for data source"
+$newRSDSCredential = Get-Credential -Message  "Enter user credentials for data source"
 
 $DataSourcePath = "$newRSDSFolder/$newRSDSName"
 
