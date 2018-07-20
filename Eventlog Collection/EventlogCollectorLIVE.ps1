@@ -9,6 +9,7 @@ $DWHlastRunDate = $resultsDWH1[0][0];
 $DWH2lastRunDate = $resultsDWH2[0][0];
 $TravellerNode1lastRunDate = $resultsTravellerNode1[0][0];
 $TravellerNode2lastRunDate = $resultsTravellerNode2[0][0];
+
 #Write-Host Dates Updated
 #Copy all event from the Application log to the the databases
 #Get-EventLog -ComputerName DWH -LogName Application -After $DWHlastRunDate |ConvertTo-DbaDataTable |Write-DbaDataTable -SqlInstance LTEAR06371 -Database DBAdmin -Table PS_WindowsLogsLIVE -AutoCreateTable
