@@ -18,7 +18,6 @@ $TravellerNode2lastRunDate = $resultsTravellerNode2[0][0];
 #Write-Host UAT Completed
 #Get-EventLog -ComputerName Wercovrdevsqld1 -LogName Application -After $DEVlastRunDate |ConvertTo-DbaDataTable |Write-DbaDataTable -SqlInstance Wercovrdevsqld1 -Database DBAdmin -Table PS_WindowsLogs -AutoCreateTable
 #Write-Host Dev Completed
-
 Get-EventLog -ComputerName VLOPVRDWHSQL01 -LogName Application -After $DWHlastRunDate -Verbose |ConvertTo-DbaDataTable |Write-DbaDataTable -SqlInstance LTEAR06371 -Database DBAdmin -Table PS_WindowsLogsLIVE -AutoCreateTable -Verbose
 Get-EventLog -ComputerName VLOPVRDWHSQL02 -LogName Application -After $DWH2lastRunDate -verbose |ConvertTo-DbaDataTable |Write-DbaDataTable -SqlInstance LTEAR06371 -Database DBAdmin -Table PS_WindowsLogsLIVE -AutoCreateTable -verbose
 
