@@ -2,6 +2,7 @@
 
 #Report server URL parameter
 $reportServerUri = 'http://thgdocuments/Reportserver'
+$reportServerUriDest = 'http://wercovrdevsqld1/Reportserver'
 #source parameters
 $sourceRSFolder = "/Brease/Detail Reports"
 $downloadFolder = "C:\Temp\ReportBackups"
@@ -22,7 +23,7 @@ $newRSDSCredential = Get-Credential -Message  "Enter user credentials for data s
 $DataSourcePath = "$newRSDSFolder/$newRSDSName"
 
 # Creates a new folder on the root of report server
-New-RsFolder -ReportServerUri $reportServerUri -RsFolder $destinationFolderPath -FolderName $destinationFolderName
+New-RsFolder -ReportServerUri $reportServerUriDest -RsFolder $destinationFolderPath -FolderName $destinationFolderName
 
 #Download all objects of type Report
 Get-RsFolderContent -ReportServerUri $reportServerUri -RsFolder $sourceRSFolder |  Where-Object TypeName -eq 'Report' |
@@ -34,7 +35,7 @@ Get-RsFolderContent -ReportServerUri $reportServerUri -RsFolder $sourceRSFolder 
 #Out-RsFolderContent -ReportServerUri $reportServerUri -RsFolder $sourceRSFolder -Destination $downloadFolder
 
 #Upload all files from the download folder
-Write-RsFolderContent -ReportServerUri $reportServerUri -Path $downloadFolder -RsFolder $newRSFolderPath
+Write-RsFolderContent -ReportServerUri $reportServerUriDest -Path $downloadFolder -RsFolder $newRSFolderPath
 
 #Add new datasource
 New-RsDataSource -ReportServerUri $reportServerUri -RsFolder $newRSDSFolder -Name $newRSDSName -Extension $newRSDSExtension -ConnectionString $newRSDSConnectionString -CredentialRetrieval $newRSDSCredentialRetrieval -DatasourceCredentials $newRSDSCredential
@@ -50,3 +51,7 @@ $Results | Where-Object TypeName -eq 'Report' | ForEach-Object {
         Write-Warning "Report $($_.Path) does not contain an datasource"
     }
 }
+
+
+Write-RsRestCatalogItem -ReportPortalUri 'http://wercovrdevsqld1/Reports' -Path 'C:\Temp\ReportBackups\V2 - [THG] Comm. Owner Statement - Wrapper.rdl' -RsFolder '/FolderB'
+
