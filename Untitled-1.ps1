@@ -6,8 +6,10 @@ Get-RsItemReferences -ReportServerUri $reportServerUri -Path 'C:\Temp\SSRSReport
 
 Get-RsFolderContent -ReportServerUri $reportServerUri -RsFolder /BreaseReportUploads
 
-
 get-help Move-Item -Examples
+
+
+New-RsFolder -ReportServerUri $reportServerUriDest -RsFolder $destinationFolderPath -FolderName BreaseReportBackups
 #Remove-RsRestFolder -RsFolder $newRSFolderPath 
 <#
 #Report server URL parameter

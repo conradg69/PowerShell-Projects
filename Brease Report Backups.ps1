@@ -10,19 +10,24 @@ $DevBackupFolder = "$BreaseDevFolder-$DateTimeFormatted"
 $DevBackupFolderLocation = "$RootBackupFolderPath/$DevBackupFolder"
 $DetailReportsFolder = "Detail Reports"
 $SelectorReportsFolder = "Selector Reports"
-$downloadFolder = "C:\Temp\ReportBackups\"
+$downloadFolder = "C:\Temp\ReportBackups\TR4_DEV\Detail Reports $DateTimeFormatted"
+$ManualUploadFolder = "C:\Temp\SSRSReportUpload\ManualUpload\"
 
 #create Root Backup Folder
 New-RsFolder -ReportServerUri $reportServerUriDest -RsFolder $RootBackupFolderPath -FolderName $DevBackupFolder
 
+
 #Create Brease Sub Folders in the New Backup folder
-New-RsFolder -ReportServerUri $reportServerUriDest -RsFolder $DevBackupFolderLocation -FolderName "Detail Reports"
-New-RsFolder -ReportServerUri $reportServerUriDest -RsFolder $DevBackupFolderLocation -FolderName "Selector Reports"
+New-Item -Path $downloadFolder -ItemType directory 
+
+#New-RsFolder -ReportServerUri $reportServerUriDest -RsFolder $DevBackupFolderLocation -FolderName "Detail Reports"
+#New-RsFolder -ReportServerUri $reportServerUriDest -RsFolder $DevBackupFolderLocation -FolderName "Selector Reports"
 
 #Download all Reports to a Folder of type Report
 Get-RsFolderContent -ReportServerUri $reportServerUriDest -RsFolder "$RootFolderPath$BreaseDevFolder/$DetailReportsFolder" |  Where-Object TypeName -eq 'Report' |
     Select-Object -ExpandProperty Path |
     Out-RsCatalogItem -ReportServerUri $reportServerUriDest -Destination $downloadFolder
+
 
 
 <#

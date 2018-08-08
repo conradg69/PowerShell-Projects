@@ -5,7 +5,6 @@
 #Report server URL parameter
 #get-help Remove-RsCatalogItem  -Examples
 
-
 $reportServerUri = 'http://wercovrdevsqld1/Reportserver'
 $reportServerUriDest = 'http://wercovrdevsqld1/Reportserver'
 #source parameters
@@ -20,16 +19,17 @@ $newRSFolderPath = "$destinationFolderPath$destinationFolderName"
 #$newRSFolderPath2 = "/BreaseLive Reports"
 # Creates a new folder on the root of report server
 
- 
+Remove-RsCatalogItem -ReportServerUri $reportServerUri -RsItem $newRSFolderPath
+Get-ChildItem -Path $RootFolder -Include * | remove-Item -recurse 
+New-Item -Path $ManualUploadFolder -ItemType directory  
+New-Item -Path $downloadFolder -ItemType directory  
 
 #Download all Reports to a Folder of type Report
 Get-RsFolderContent -ReportServerUri $reportServerUri -RsFolder $sourceRSFolder |  Where-Object TypeName -eq 'Report' |
     Select-Object -ExpandProperty Path |
     Out-RsCatalogItem -ReportServerUri $reportServerUri -Destination $downloadFolder
 
-
 Get-ChildItem -Path $downloadFolder  -Recurse -Filter "*[*" | Move-Item -Destination  $ManualUploadFolder
-
 
 #Download all files in the diretory
 #Out-RsFolderContent -ReportServerUri $reportServerUriDest -RsFolder $sourceRSFolder -Destination $downloadFolder
@@ -38,7 +38,6 @@ New-RsFolder -ReportServerUri $reportServerUriDest -RsFolder $destinationFolderP
 
 #Upload all files from the download folder
 Write-RsFolderContent -ReportServerUri $reportServerUriDest -Path $downloadFolder -RsFolder $newRSFolderPath -Overwrite
-
 
 $Results = Get-RsCatalogItems -ReportServerUri $reportServerUriDest -RsFolder $newRSFolderPath
 $DataSourcePath2 = "/Brease_Dev/Data Sources/BreaseDev"
