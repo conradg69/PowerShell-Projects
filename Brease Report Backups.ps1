@@ -10,15 +10,13 @@ $DetailReportsFolder = "Detail Reports"
 $SelectorReportsFolder = "Selector Reports"
 $downloadFolderDetailReports = "C:\Temp\ReportBackups\TR4_DEV\Detail Reports $DateTimeFormatted"
 $downloadFolderSelectorReports = "C:\Temp\ReportBackups\TR4_DEV\Selector Reports $DateTimeFormatted"
-$ManualUploadFolder = "Manual_Upload"
-$ManualUploadReports = "C:\Temp\ReportBackups\TR4_DEV\$ManualUploadFolder $DateTimeFormatted"
 $DataSourcePath2 = "/Brease_Dev/Data Sources/BreaseDev"
 $TR4_DEVRootFolder = 'C:\Temp\ReportBackups\TR4_DEV'
 
 #Create Brease Sub Folders in the New Backup folder
 New-Item -Path $downloadFolderDetailReports -ItemType directory 
 New-Item -Path $downloadFolderSelectorReports -ItemType directory 
-New-Item -Path $ManualUploadReports -ItemType directory 
+
 
 write-host 'Creating SSRS Folders'
 
@@ -41,8 +39,9 @@ Get-RsFolderContent -ReportServerUri $reportServerUriDest -RsFolder "$RootFolder
     Select-Object -ExpandProperty Path |
     Out-RsCatalogItem -ReportServerUri $reportServerUriDest -Destination $downloadFolderSelectorReports
 
-    #Move Reports that need to be manually uploaded to the a separate folder
-Get-ChildItem -Path $downloadFolderDetailReports  -Recurse -Filter "*[*" | Move-Item -Destination  $ManualUploadReports
+#Delete Reports from the folder that contain Square brackets. No longer used and cannot be uploaded
+Get-ChildItem -Path $downloadFolderDetailReports  -Recurse -Filter "*[*" | Remove-Item
+Get-ChildItem -Path $downloadFolderDetailReports  -Recurse -Filter "*WebAppsTest*" | Remove-Item
 
 write-host 'Uploading Detail Reports'
 
@@ -56,12 +55,11 @@ Write-RsFolderContent -ReportServerUri $reportServerUriDest -Path $downloadFolde
 
 #Clean Up - moved RDL's folder to a New folder
 New-Item -Path "$TR4_DEVRootFolder/ReportBackups $DateTimeFormatted" -ItemType directory
-Move-Item -Path $ManualUploadReports -Destination "$TR4_DEVRootFolder/ReportBackups $DateTimeFormatted"
 Move-Item -Path $downloadFolderDetailReports -Destination "$TR4_DEVRootFolder/ReportBackups $DateTimeFormatted"
 Move-Item -Path $downloadFolderSelectorReports -Destination "$TR4_DEVRootFolder/ReportBackups $DateTimeFormatted"
 
 write-host 'Updating DataSourses - Selector Reports'
-
+#Upload all Selector Report RDL's from the folder to SSRS location
 $BackedUpSelectorReports = Get-RsCatalogItems -ReportServerUri $reportServerUriDest -RsFolder "$RootBackupFolderPath/$DevBackupFolder/$SelectorReportsFolder"
 # Set report datasource
 $BackedUpSelectorReports | Where-Object TypeName -eq 'Report' | ForEach-Object {
@@ -76,7 +74,7 @@ $BackedUpSelectorReports | Where-Object TypeName -eq 'Report' | ForEach-Object {
 }
 
 write-host 'Updating DataSourses - Detail Reports'
-
+#Upload all Detail Report RDL's from the folder to SSRS location
 $BackedUpDetailReports = Get-RsCatalogItems -ReportServerUri $reportServerUriDest -RsFolder "$RootBackupFolderPath/$DevBackupFolder/$DetailReportsFolder"
 # Set report datasource
 $BackedUpDetailReports | Where-Object TypeName -eq 'Report' | ForEach-Object {
@@ -89,4 +87,5 @@ $BackedUpDetailReports | Where-Object TypeName -eq 'Report' | ForEach-Object {
         Write-Warning "Report $($_.Path) does not contain an datasource"
     }
 }
+
 
