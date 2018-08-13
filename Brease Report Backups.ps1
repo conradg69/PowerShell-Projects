@@ -13,10 +13,9 @@ $downloadFolderSelectorReports = "C:\Temp\ReportBackups\TR4_DEV\Selector Reports
 $DataSourcePath2 = "/Brease_Dev/Data Sources/BreaseDev"
 $TR4_DEVRootFolder = 'C:\Temp\ReportBackups\TR4_DEV'
 
-#Create Brease Sub Folders in the New Backup folder
+#Create Download folders for the Brease RDL files
 New-Item -Path $downloadFolderDetailReports -ItemType directory 
 New-Item -Path $downloadFolderSelectorReports -ItemType directory 
-
 
 write-host 'Creating SSRS Folders'
 
@@ -53,7 +52,7 @@ write-host 'Downloading Selector Reports'
 #Upload all Selector Reports from the download folder
 Write-RsFolderContent -ReportServerUri $reportServerUriDest -Path $downloadFolderSelectorReports -RsFolder "$RootBackupFolderPath/$DevBackupFolder/$SelectorReportsFolder" -Overwrite
 
-#Clean Up - moved RDL's folder to a New folder
+#Clean Up - move RDL's folder to a New folder
 New-Item -Path "$TR4_DEVRootFolder/ReportBackups $DateTimeFormatted" -ItemType directory
 Move-Item -Path $downloadFolderDetailReports -Destination "$TR4_DEVRootFolder/ReportBackups $DateTimeFormatted"
 Move-Item -Path $downloadFolderSelectorReports -Destination "$TR4_DEVRootFolder/ReportBackups $DateTimeFormatted"
