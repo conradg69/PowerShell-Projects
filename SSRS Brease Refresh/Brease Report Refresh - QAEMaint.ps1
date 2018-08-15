@@ -27,26 +27,22 @@ New-Item -Path $downloadFolderLiveSelectorReports -ItemType directory
 write-host 'Downloading Detail Reports'
 #Download all Detail Report RDL files to a Folder 
 Get-RsFolderContent -ReportServerUri $reportServerUriDest -RsFolder "$RootFolderPath$BreaseQAEFolderSSRS/$DetailReportsFolder" |  Where-Object TypeName -eq 'Report' |
-    Select-Object -ExpandProperty Path |
-    Out-RsCatalogItem -ReportServerUri $reportServerUriDest -Destination $downloadFolderDetailReports 
+    Select-Object -ExpandProperty Path | Out-RsCatalogItem -ReportServerUri $reportServerUriDest -Destination $downloadFolderDetailReports 
 
 write-host 'Downloading Selector Reports'
 #Download all Selector Report RDL files to a Folder 
 Get-RsFolderContent -ReportServerUri $reportServerUriDest -RsFolder "$RootFolderPath$BreaseQAEFolderSSRS/$SelectorReportsFolder" |  Where-Object TypeName -eq 'Report' |
-    Select-Object -ExpandProperty Path |
-    Out-RsCatalogItem -ReportServerUri $reportServerUriDest -Destination $downloadFolderSelectorReports
+    Select-Object -ExpandProperty Path | Out-RsCatalogItem -ReportServerUri $reportServerUriDest -Destination $downloadFolderSelectorReports
 
 write-host 'Downloading Live Detail Reports'
 #Download all Live Detail Report RDL files to a Folder 
 Get-RsFolderContent -ReportServerUri $reportServerUriLive -RsFolder "/Brease/$DetailReportsFolder" |  Where-Object TypeName -eq 'Report' |
-    Select-Object -ExpandProperty Path |
-    Out-RsCatalogItem -ReportServerUri $reportServerUriLive -Destination $downloadFolderLiveDetailReports
+    Select-Object -ExpandProperty Path | Out-RsCatalogItem -ReportServerUri $reportServerUriLive -Destination $downloadFolderLiveDetailReports
 
 write-host 'Downloading Live Selector Reports'
 #Download all Selector Report RDL files to a Folder 
 Get-RsFolderContent -ReportServerUri $reportServerUriLive -RsFolder "/Brease/$SelectorReportsFolder" |  Where-Object TypeName -eq 'Report' |
-    Select-Object -ExpandProperty Path |
-    Out-RsCatalogItem -ReportServerUri $reportServerUriLive -Destination $downloadFolderLiveSelectorReports
+    Select-Object -ExpandProperty Path | Out-RsCatalogItem -ReportServerUri $reportServerUriLive -Destination $downloadFolderLiveSelectorReports
 
 #Move Reports that need to be manually uploaded to the a separate folder
 Get-ChildItem -Path $downloadFolderLiveDetailReports  -Recurse -Filter "*[*" | Remove-Item
@@ -54,8 +50,9 @@ Get-ChildItem -Path $downloadFolderLiveDetailReports  -Recurse -Filter "*WebApps
 Get-ChildItem -Path $downloadFolderDetailReports  -Recurse -Filter "*[*" | Remove-Item
 Get-ChildItem -Path $downloadFolderDetailReports  -Recurse -Filter "*WebAppsTest*" | Remove-Item
 
-Remove-RsCatalogItem -ReportServerUri $reportServerUriDest -RsItem "$RootFolderPath$BreaseQAEFolderSSRS/$SelectorReportsFolder" #-Confirm:$false 
-Remove-RsCatalogItem -ReportServerUri $reportServerUriDest -RsItem "$RootFolderPath$BreaseQAEFolderSSRS/$DetailReportsFolder" #-Confirm:$false 
+#Drop the Current QAE Maint Brease SSRS Folders
+Remove-RsCatalogItem -ReportServerUri $reportServerUriDest -RsItem "$RootFolderPath$BreaseQAEFolderSSRS/$SelectorReportsFolder" -Confirm:$false 
+Remove-RsCatalogItem -ReportServerUri $reportServerUriDest -RsItem "$RootFolderPath$BreaseQAEFolderSSRS/$DetailReportsFolder" -Confirm:$false 
 
 write-host 'Creating SSRS Folders'
 #create SSRS Folders
