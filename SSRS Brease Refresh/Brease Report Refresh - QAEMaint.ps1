@@ -115,7 +115,6 @@ $BackedUpDetailReports | Where-Object TypeName -eq 'Report' | ForEach-Object {
 }
 
 write-host 'Updating DataSourses - Live Detail Reports'
-
 $BackedUpLiveDetailReports = Get-RsCatalogItems -ReportServerUri $reportServerUriDest -RsFolder "$RootFolderPath$BreaseQAEFolderSSRS/$DetailReportsFolder"
 # Set report datasource
 $BackedUpLiveDetailReports | Where-Object TypeName -eq 'Report' | ForEach-Object {
